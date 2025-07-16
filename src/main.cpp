@@ -5,17 +5,17 @@
 int main(int argc, char* argv[])
 {
 	//创建窗口
-	sf::RenderWindow window(sf::VideoMode({ 600, 800 }), "Example animation");
+	sf::RenderWindow window(sf::VideoMode({ 800, 600 }), "Example animation");
 
 	//加载纹理图像
-	sf::Texture textures("../data/images/eye.png");
+	sf::Texture textures("../data/images/sprite.png");
 	// textures.loadFromFile("../data/images/eye.png");
 
 	//创建两个动画序列容器
 	Animation walkLeft(&textures);
-	walkLeft.addFramesLine(4, 2, 0);
+	walkLeft.addFramesLine(10, 2, 0);
 	Animation walkRight(&textures);
-	walkRight.addFramesLine(4, 2, 1);
+	walkRight.addFramesLine(10, 2, 1);
 
 	//创建精灵动画对象
 	AnimatedSprite sprite(&walkLeft, AnimatedSprite::Playing, sf::seconds(0.1));
