@@ -46,9 +46,9 @@ target_compile_features(main PRIVATE cxx_std_17)
 target_link_libraries(main
     PUBLIC
         AnimationLib
-        # 静态链接运行时库
-        -static-libgcc
-        -static-libstdc++
+        # 针对MinGW，需要添加静态链接运行时库
+        # -static-libgcc
+        # -static-libstdc++
 )
 
 # 测试 & 打包
@@ -61,9 +61,9 @@ install(DIRECTORY "data/"
         FILES_MATCHING PATTERN "*"
 )
 
-set(CPACK_PACKAGE_NAME "CMakeSFMLProject")
+set(CPACK_PACKAGE_NAME "SpriteSheetAnimation")
 set(CPACK_PACKAGE_VERSION "1.0.0")
 set(CPACK_PACKAGE_VENDOR "HDU")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "CMake-SFML-Project")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "CMake-SFML-Sprite-Sheet-Animation")
 set(CPACK_PACKAGE_CONTACT "contact@example.com")
 include(CPack)
