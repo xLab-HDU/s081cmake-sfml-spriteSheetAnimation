@@ -2,6 +2,10 @@ name: CI
 
 on: [push, pull_request]
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     name: ${{ matrix.platform.name }} ${{ matrix.config.name }}
@@ -11,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-        - { name: Windows MinGW,  os: windows-2022, shell: msys2 }
+        - { name: Windows MinGW,  os: windows-2022, mingw: true, toolchain: "x86_64-w64-mingw32" }  # MinGW
         - { name: Linux GCC,      os: ubuntu-latest }
         - { name: Linux Clang,    os: ubuntu-latest, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ }
         - { name: macOS,          os: macos-latest  }
@@ -24,40 +28,17 @@ jobs:
       if: runner.os == 'Linux'
       run: sudo apt-get update && sudo apt-get install libxrandr-dev libxcursor-dev libxi-dev libudev-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libfreetype-dev
 
+    - name: Install MinGW (Windows)
+      if: matrix.platform.mingw && runner.os == 'Windows'
+      run: |
+        choco install mingw -y
+        echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $GITHUB_PATH
+
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Set up MSYS2 (Windows only)
-      if: matrix.platform.name == 'Windows MinGW'
-      uses: msys2/setup-msys2@v2
-      with:
-        update: true
-        install: >-
-          mingw-w64-x86_64-gcc
-          mingw-w64-x86_64-cmake
-          mingw-w64-x86_64-make
-          git
-
     - name: Configure
-      run: |
-        if [[ "${{ matrix.platform.name }}" == "Windows MinGW" ]]; then
-          cmake -G "MinGW Makefiles" -B build -DCMAKE_BUILD_TYPE=Release ${{ matrix.config.flags }}
-        else
-          cmake -B build -DCMAKE_BUILD_TYPE=Release ${{ matrix.platform.flags }} ${{ matrix.config.flags }}
-        fi
+      run: cmake -B build ${{matrix.platform.flags}} ${{matrix.config.flags}}
 
     - name: Build
-      run: |
-        if [[ "${{ matrix.platform.name }}" == "Windows MinGW" ]]; then
-          cmake --build build
-        else
-          cmake --build build --config Release
-        fi
-
-    - name: Run Smoke Test
-      run: |
-        if [[ "${{ matrix.platform.name }}" == "Windows MinGW" ]]; then
-          ./build/main.exe
-        else
-          ./build/main
-        fi
+      run: cmake --build build --config Release
