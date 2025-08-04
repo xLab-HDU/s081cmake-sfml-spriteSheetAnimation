@@ -9,7 +9,6 @@ int main(int argc, char* argv[])
 
 	//加载纹理图像
 	sf::Texture textures("../data/images/sprite.png");
-	// textures.loadFromFile("../data/images/eye.png");
 
 	//创建两个动画序列容器
 	Animation walkLeft(&textures);
