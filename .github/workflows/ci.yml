@@ -15,8 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-        - { name: Windows VS2019, os: windows-2019  }
-        - { name: Windows VS2022, os: windows-2022  }
+        - { name: Windows MinGW,  os: windows-2022, shell: msys2 }
         - { name: Linux GCC,      os: ubuntu-latest }
         - { name: Linux Clang,    os: ubuntu-latest, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ }
         - { name: macOS,          os: macos-latest  }
@@ -32,8 +31,37 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Set up MSYS2 (Windows only)
+      if: matrix.platform.name == 'Windows MinGW'
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        install: >-
+          mingw-w64-x86_64-gcc
+          mingw-w64-x86_64-cmake
+          mingw-w64-x86_64-make
+          git
+
     - name: Configure
-      run: cmake -B build ${{matrix.platform.flags}} ${{matrix.config.flags}}
+      run: |
+        if [[ "${{ matrix.platform.name }}" == "Windows MinGW" ]]; then
+          cmake -G "MinGW Makefiles" -B build -DCMAKE_BUILD_TYPE=Release ${{ matrix.config.flags }}
+        else
+          cmake -B build -DCMAKE_BUILD_TYPE=Release ${{ matrix.platform.flags }} ${{ matrix.config.flags }}
+        fi
 
     - name: Build
-      run: cmake --build build --config Release
+      run: |
+        if [[ "${{ matrix.platform.name }}" == "Windows MinGW" ]]; then
+          cmake --build build
+        else
+          cmake --build build --config Release
+        fi
+
+    - name: Run Smoke Test
+      run: |
+        if [[ "${{ matrix.platform.name }}" == "Windows MinGW" ]]; then
+          ./build/main.exe
+        else
+          ./build/main
+        fi
