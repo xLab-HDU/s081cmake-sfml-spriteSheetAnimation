@@ -2,10 +2,6 @@ name: CI
 
 on: [push, pull_request]
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
   build:
     name: ${{ matrix.platform.name }} ${{ matrix.config.name }}
