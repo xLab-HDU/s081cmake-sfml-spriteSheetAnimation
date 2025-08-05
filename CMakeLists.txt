@@ -46,10 +46,15 @@ target_compile_features(main PRIVATE cxx_std_17)
 target_link_libraries(main
     PUBLIC
         AnimationLib
-        # 针对MinGW，需要添加静态链接运行时库
-        # -static-libgcc
-        # -static-libstdc++
 )
+
+# 针对MinGW，静态链接时需要将 libstdc++ 和 libgcc 编译进可执行文件中，避免运行时依赖外部 DLL
+if(CMAKE_CXX_COMPILER_ID MATCHES "MinGW")
+    target_link_libraries(main PRIVATE
+        -static-libgcc
+        -static-libstdc++
+    )
+endif()
 
 # 测试 & 打包
 enable_testing()
