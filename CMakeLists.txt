@@ -48,11 +48,16 @@ target_link_libraries(main
         AnimationLib
 )
 
-# 针对MinGW，静态链接时需要将 libstdc++ 和 libgcc 编译进可执行文件中，避免运行时依赖外部 DLL
-if(CMAKE_CXX_COMPILER_ID MATCHES "MinGW")
-    target_link_libraries(main PRIVATE
-        -static-libgcc
-        -static-libstdc++
+# 在Windows系统中（使用 MinGW-w64）构建时
+# 静态链接需要将libstdc++、libgcc和libwinpthread-1.dll编译进可执行文件中，避免运行时依赖外部 DLL
+if(WIN32 AND (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")))
+  target_link_libraries(main PRIVATE
+      -static-libgcc
+      -static-libstdc++
+    )  
+  target_link_options(main PRIVATE
+      "-static"
+      "-Wl,-Bstatic,--whole-archive" -lwinpthread "-Wl,--no-whole-archive"
     )
 endif()
 
