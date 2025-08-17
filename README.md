@@ -1,7 +1,7 @@
 # CMake SFML Sprite Sheet Animation
 This repository is a Sprite Sheet Animation implemented in C++ using SFML, built with CMake. 
 
-[![Build Status](https://github.com/xLab-HDU/cmake-sfml-spriteSheetAnimation/actions/workflows/ci.yml/badge.svg)](https://github.com/xLab-HDU/cmake-sfml-spriteSheetAnimation/actions)
+[![Build Status](https://github.com/xLab-HDU/s081cmake-sfml-spriteSheetAnimation/actions/workflows/ci.yml/badge.svg)](https://github.com/xLab-HDU/s081cmake-sfml-spriteSheetAnimation/actions)
 
 ## How to Use
 
