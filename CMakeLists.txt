@@ -29,7 +29,6 @@ add_library(AnimationLib
 # 头文件目录
 target_include_directories(AnimationLib PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${SFML_INCLUDE_DIR}
 )
 
 # 链接库
