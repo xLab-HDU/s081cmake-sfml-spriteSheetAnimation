@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 	sf::RenderWindow window(sf::VideoMode({ 800, 600 }), "Example animation");
 
 	//加载纹理图像
-	sf::Texture textures("../data/images/sprite.png");
+	sf::Texture textures("./data/images/sprite.png");
 
 	//创建两个动画序列容器
 	Animation walkLeft(&textures);
