@@ -1,3 +1,11 @@
+/*
+ * 项目名称：s081cmake-sfml-spriteSheetAnimation
+ * 开发者：李仕
+ * 所属组织：xLab-HDU
+ * 代码仓库：https://github.com/xLab-HDU
+ * 
+ * 本代码为开源项目，欢迎提交 Issue 和 Pull Request。
+ */
 #include <SFML/Graphics.hpp>
 #include "Animation.hpp"
 #include "AnimatedSprite.hpp"
